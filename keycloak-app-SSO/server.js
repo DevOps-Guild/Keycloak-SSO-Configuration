@@ -17,7 +17,10 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const KEYCLOAK_URL = 'http://localhost:8080'
+// Inside Docker this resolves to the "keycloak" service name (set via
+// the KEYCLOAK_URL env var in docker-compose.yml). Falls back to
+// localhost for running the server outside of Docker.
+const KEYCLOAK_URL = process.env.KEYCLOAK_URL || 'http://localhost:8080'
 const PORT = process.env.PORT || 3000
 const DIST_DIR = path.join(__dirname, 'dist')
 
@@ -106,7 +109,7 @@ const server = http.createServer((req, res) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`\n✅ MyApp server running at http://localhost:${PORT}`)
-  console.log(`   📡 API proxy → ${KEYCLOAK_URL}`)
-  console.log(`   📁 Static files → dist/\n`)
+  console.log(`\n MyApp server running at http://localhost:${PORT}`)
+  console.log(`    API proxy → ${KEYCLOAK_URL}`)
+  console.log(`    Static files → dist/\n`)
 })
