@@ -17,7 +17,10 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const KEYCLOAK_URL = 'http://localhost:8080'
+// Inside Docker this resolves to the "keycloak" service name (set via
+// the KEYCLOAK_URL env var in docker-compose.yml). Falls back to
+// localhost for running the server outside of Docker.
+const KEYCLOAK_URL = process.env.KEYCLOAK_URL || 'http://localhost:8080'
 const PORT = process.env.PORT || 3001
 const DIST_DIR = path.join(__dirname, 'dist')
 
