@@ -17,13 +17,13 @@ Keycloak-app-SSO-2 i'll call this app 2
   3. makes requests to keycloak at port 8080
 
 # docker and keycloak set up (My interpretation of gemini)
-  the "docs" folder contains the keycloak set up including the realms, clients and all configurations predefined
+  the "doc" folder contains the keycloak set up including the realms, clients and all configurations predefined
 ## Prerequisite: make sure you have docker desktop installed and running before doing the below
   1. Open a terminal and make sure the directory is the **root of this repository**
-  2. Start the container with the command: "docker compose up -d", 
-  3. the "-d" runs the container in the background so as to not disturb your terminal
-  4. you'll see a container named "keycloak" running on port 8080
-  5. go to "localhost:8080" on your broswer
+  2. Start the stack with the command: "docker compose up -d"
+  3. the "-d" runs the containers in the background so as to not disturb your terminal
+  4. you'll see three containers: "keycloak" on port 8080, app 1 on port 3000, and app 2 on port 3001
+  5. go to "localhost:3000" for app 1, "localhost:3001" for app 2, and "localhost:8080" for Keycloak
 ### Login credentails
   **username**: admin
   **password**: admin

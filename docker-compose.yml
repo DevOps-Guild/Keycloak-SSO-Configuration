@@ -4,69 +4,53 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
+    command: start-dev --import-realm
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
-      # Enables the /health/ready endpoint used by the healthcheck below
-      KC_HEALTH_ENABLED: "true"
-      # Keycloak resolves ${env.VAR} placeholders inside the imported realm
-      # JSON at startup, so the Google secret never has to be committed to git.
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
     ports:
-      - "8080:8080"
+      - "8081:8080"
     volumes:
-      # Mounts your custom realm JSON file into Keycloak's auto-import folder
-      - ./doc/myapp-frontend-realm.json:/opt/keycloak/data/import/myapp-frontend-realm.json
-    # Automatically imports the realm file on startup
-    command: start-dev --import-realm
-    healthcheck:
-      # Keycloak's image doesn't ship curl/wget, so do a plain TCP check
-      # against the management/health port.
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080 || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 30s
-    networks:
-      - sso-net
+      - ./doc/myapp-frontend-realm.json:/opt/keycloak/data/import/myapp-frontend-realm.json:ro
 
   app1:
-    build:
-      context: ./keycloak-app-SSO
-      dockerfile: Dockerfile
-    container_name: app1
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "corepack enable && npm ci && npm run build && node server.js"
     environment:
       PORT: 3000
-      # Server-side proxy target: container-to-container traffic uses the
-      # "keycloak" service name, not localhost (browser-side keycloak-js
-      # config still points at http://localhost:8080, since the browser
-      # reaches Keycloak through the published host port above).
       KEYCLOAK_URL: http://keycloak:8080
+      VITE_KEYCLOAK_URL: http://localhost:8081
+      VITE_KEYCLOAK_REALM: myapp-frontend
+      VITE_KEYCLOAK_CLIENT_ID: myapp-frontend
+    volumes:
+      - ./keycloak-app-SSO:/app
+      - app1_node_modules:/app/node_modules
     ports:
       - "3000:3000"
     depends_on:
-      keycloak:
-        condition: service_healthy
-    networks:
-      - sso-net
+      - keycloak
 
   app2:
-    build:
-      context: ./keycloak-app-SSO-2
-      dockerfile: Dockerfile
-    container_name: app2
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "corepack enable && npm ci && npm run build && node server.js"
     environment:
       PORT: 3001
       KEYCLOAK_URL: http://keycloak:8080
+      VITE_KEYCLOAK_URL: http://localhost:8081
+      VITE_KEYCLOAK_REALM: myapp-frontend
+      VITE_KEYCLOAK_CLIENT_ID: myapp-frontend-2
+    volumes:
+      - ./keycloak-app-SSO-2:/app
+      - app2_node_modules:/app/node_modules
     ports:
       - "3001:3001"
     depends_on:
-      keycloak:
-        condition: service_healthy
-    networks:
-      - sso-net
+      - keycloak
 
-networks:
-  sso-net:
-    driver: bridge
+volumes:
+  app1_node_modules:
+  app2_node_modules:
