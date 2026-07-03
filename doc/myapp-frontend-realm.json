@@ -27,9 +27,16 @@
         "http://localhost:4173/*",
         "http://localhost:4173",
         "http://localhost:3000/*",
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "https://*.amazonaws.com/*",
+        "https://your-app-production-domain.com/*"
       ],
-      "webOrigins": ["*"],
+      "webOrigins": [
+        "http://localhost:5173",
+        "http://localhost:4173",
+        "http://localhost:3000",
+        "https://your-app-production-domain.com"
+      ],
       "attributes": {
         "pkce.code.challenge.method": "S256"
       }
