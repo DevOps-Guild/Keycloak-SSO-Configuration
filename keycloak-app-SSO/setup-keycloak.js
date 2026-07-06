@@ -8,7 +8,7 @@
  *   node setup-keycloak.js
  */
 
-const KEYCLOAK_URL = 'http://localhost:8080'
+const KEYCLOAK_URL = process.env.KEYCLOAK_URL || 'http://localhost:8080'
 const ADMIN_USER = 'benson'      // Change to your Keycloak admin username
 const ADMIN_PASS = 'admin'       // Change to your Keycloak admin password
 
