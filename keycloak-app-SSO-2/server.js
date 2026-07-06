@@ -17,6 +17,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const KEYCLOAK_URL = process.env.KEYCLOAK_URL || "http://localhost:8080"
 const KEYCLOAK_URL = process.env.KEYCLOAK_URL || 'http://localhost:8080'
 const PORT = process.env.PORT || 3001
 const DIST_DIR = path.join(__dirname, 'dist')
