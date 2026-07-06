@@ -106,7 +106,7 @@ const server = http.createServer((req, res) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`\n✅ MyApp server running at http://localhost:${PORT}`)
-  console.log(`   📡 API proxy → ${KEYCLOAK_URL}`)
-  console.log(`   📁 Static files → dist/\n`)
+  console.log(`\n MyApp server running at http://localhost:${PORT}`)
+  console.log(`    API proxy → ${KEYCLOAK_URL}`)
+  console.log(`    Static files → dist/\n`)
 })

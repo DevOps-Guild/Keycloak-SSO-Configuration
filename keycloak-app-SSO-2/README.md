@@ -31,7 +31,7 @@ Edit `src/keycloak.config.js`:
 const keycloakConfig = {
   url:      'https://your-keycloak-host/auth',
   realm:    'your-realm',
-  clientId: 'your-client-id',
+  clientId: 'myapp-frontend-2',
 }
 ```
 
@@ -55,8 +55,8 @@ In your Keycloak Admin Console, make sure your client has:
 | Access Type | public |
 | Standard Flow | ✅ Enabled (for SSO button) |
 | Direct Access Grants | ✅ Enabled (for username/password form) |
-| Valid Redirect URIs | http://localhost:5173/* and your production URL |
-| Web Origins | http://localhost:5173 and your production URL |
+| Valid Redirect URIs | http://localhost:5174/*, http://localhost:4174/*, http://localhost:3001/*, and your production URL |
+| Web Origins | http://localhost:5174, http://localhost:4174, http://localhost:3001, and your production URL |
 
 ## Auth Flows
 
