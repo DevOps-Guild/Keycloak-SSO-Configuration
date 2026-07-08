@@ -9,3 +9,12 @@ Completed: 3 july 2026
     > added 9 lines of code
 ## Comments & Struggles
     No struggles or difficulties, it was an easy task
+# Issue 2: Learn the AWS basics we need for this project #29
+assigned: 6 july 2026
+Cmpleted: ...{loading}
+
+##Timeline
+Session 1: 8 july 2026
+    > Cloned a repo off of Github titled "docker-starter" (got it off a yt video)
+    > Ran the build commands and ensured that the container works
+Session 2: {...}
