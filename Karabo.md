@@ -3,7 +3,7 @@ assigned : 26 June 2026
 Completed: 3 july 2026
 
 ## Timeline
-    July 2026: 1300-1500
+    Session1: 3 July 2026: 1300-1500
 ## Changes
     myapp-frontend-realm.json:
     > added 9 lines of code
