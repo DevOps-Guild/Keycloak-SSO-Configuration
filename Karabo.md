@@ -10,14 +10,18 @@ Completed: 3 july 2026
 ## Comments & Struggles
     No struggles or difficulties, it was an easy task
 # Issue 2: Learn the AWS basics we need for this project #29
+Used this youTube video by 'Be A Better Dev':
+
+    https://youtu.be/1_AlV-FFxM8?si=3n7FZfMR61jlRGUD
+    github.com/beabetterdevv/docker_starter
 assigned: 6 july 2026
-Cmpleted: ...{loading}
+Completed: ...{loading}
 
 ## Timeline
 Session 1: 8 july 2026
 
     > Ran the build commands and ensured that the container works
-    > Cloned a repo off of Github titled "docker-starter" (got it off a yt video)
+    > Cloned a repo off of Github titled "docker-starter" (got it off the yt video)
 Session 2: 9 july 2026
 
     > logged in to awsw
