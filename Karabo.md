@@ -13,8 +13,20 @@ Completed: 3 july 2026
 assigned: 6 july 2026
 Cmpleted: ...{loading}
 
-##Timeline
+## Timeline
 Session 1: 8 july 2026
-    > Cloned a repo off of Github titled "docker-starter" (got it off a yt video)
+
     > Ran the build commands and ensured that the container works
-Session 2: {...}
+    > Cloned a repo off of Github titled "docker-starter" (got it off a yt video)
+Session 2: 9 july 2026
+
+    > logged in to awsw
+    > created a testing repo
+    > Created a cluster for the repo
+    > Created a task in the cluster
+    > Tested the IP adress url of the task and the container works
+## Comments & struggles
+
+    > I got really uncomfortable giving out my billing information before i've even bought anything
+    > The tutorial i was following used an outdated docker and was clicking through the aws website very quickly, it was overwhelming
+    > Not as easy a task but i have no complaints with the team
