@@ -28,5 +28,6 @@ Session 2: 9 july 2026
 ## Comments & struggles
 
     > I got really uncomfortable giving out my billing information before i've even bought anything
-    > The tutorial i was following used an outdated docker and was clicking through the aws website very quickly, it was overwhelming
+    > The tutorial i was following used an outdated docker and was clicking through the aws website very quickly, 
+        it was overwhelming
     > Not as easy a task but i have no complaints with the team
