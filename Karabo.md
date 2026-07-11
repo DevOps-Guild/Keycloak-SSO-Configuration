@@ -1,5 +1,6 @@
 # Issue 1: Update redirect URLs and web origins for deployment
 assigned : 26 June 2026
+
 Completed: 3 july 2026
 
 ## Timeline
@@ -15,7 +16,8 @@ Used this youTube video by 'Be A Better Dev':
     https://youtu.be/1_AlV-FFxM8?si=3n7FZfMR61jlRGUD
     github.com/beabetterdevv/docker_starter
 assigned: 6 july 2026
-Completed: ...{loading}
+
+Completed: 9 july
 
 ## Timeline
 Session 1: 8 july 2026
@@ -35,3 +37,29 @@ Session 2: 9 july 2026
     > The tutorial i was following used an outdated docker and was clicking through the aws website very quickly, 
         it was overwhelming
     > Not as easy a task but i have no complaints with the team
+# Issue 3: Prepare a simple deployment checklist for EC2 #35
+Worked hand in hand with AI(gemini) to write and execute the steps in the deployemntChecklist.md
+
+assigned: 9 july 2026
+
+completed: 11 july 20206
+
+## Timeline
+session 1: 11 july 0700hrs-0900hrs:
+
+    > Had gemini create me a checklist
+    > Executed half of it Step by step
+    > Wrote the steps i had completed into the checklist
+    > Took a break
+
+session 2: 11 july 1100hrs-1300hrs:
+
+    > Came back from a break
+    > had an uncomfortable realiztion
+    > continued the steps in session 1 until the end
+
+## Comments & struggles
+
+    > Still not fully used to the aws console as it still feels overwhelming
+    > at the end of session 1, I didn't close the server and came back to find i was still being charged
+    > No complaints that the team or the task could have changed, my suffering in this task was self inflicted
