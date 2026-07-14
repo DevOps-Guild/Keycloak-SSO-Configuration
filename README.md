@@ -104,3 +104,4 @@ pnpm start
 - Use the root `docker-compose.yml` as the main compose file.
 - The old `doc/docker-compose.yml` file is only an example and should not be used as the main stack file.
 - If the login flow fails, check that Keycloak is running and that the redirect URIs in the realm file match the ports above.
+- For AWS EC2 deployment, follow [`AWS_DEPLOYMENT.md`](C:\Users\Administrator\OneDrive\Documents\python\Keycloak-SSO-Configuration\AWS_DEPLOYMENT.md).

@@ -5,6 +5,13 @@ WORKDIR /app
 # Enable pnpm (matches the pnpm-lock.yaml / pnpm-workspace.yaml in this repo)
 RUN corepack enable
 
+ARG VITE_KEYCLOAK_URL=http://localhost:8080
+ARG VITE_KEYCLOAK_REALM=myapp-frontend
+ARG VITE_KEYCLOAK_CLIENT_ID=myapp-frontend
+ENV VITE_KEYCLOAK_URL=$VITE_KEYCLOAK_URL
+ENV VITE_KEYCLOAK_REALM=$VITE_KEYCLOAK_REALM
+ENV VITE_KEYCLOAK_CLIENT_ID=$VITE_KEYCLOAK_CLIENT_ID
+
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 

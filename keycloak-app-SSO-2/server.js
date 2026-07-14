@@ -1,14 +1,8 @@
 /**
- * server.js — Minimal production server with Keycloak proxy
+ * server.js - Minimal production server with Keycloak proxy
  *
- * Proxies /api/* → Keycloak to avoid CORS.
+ * Proxies /api/* to Keycloak to avoid CORS.
  * Serves static files from dist/.
- *
- * Usage:
- *   npm run build
- *   node server.js
- *
- * Then open http://localhost:3000
  */
 
 import http from 'http'
@@ -17,7 +11,6 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const KEYCLOAK_URL = process.env.KEYCLOAK_URL || "http://localhost:8080"
 const KEYCLOAK_URL = process.env.KEYCLOAK_URL || 'http://localhost:8080'
 const PORT = process.env.PORT || 3001
 const DIST_DIR = path.join(__dirname, 'dist')
@@ -51,7 +44,7 @@ function proxyToKeycloak(req, res) {
   const targetUrl = new URL(targetPath, KEYCLOAK_URL)
   const url = targetUrl.toString()
 
-  console.log(`[PROXY] ${req.method} ${req.url} → ${url}`)
+  console.log(`[PROXY] ${req.method} ${req.url} -> ${url}`)
 
   let body = ''
   req.on('data', chunk => { body += chunk })
@@ -64,11 +57,8 @@ function proxyToKeycloak(req, res) {
     }
 
     const proxyReq = http.request(url, options, proxyRes => {
-      // Copy headers from Keycloak response
       res.writeHead(proxyRes.statusCode, proxyRes.headers)
 
-      // Keycloak returns 302 on registration success — don't auto-follow,
-      // let the browser handle it (or we intercept for our SPA)
       if (proxyRes.statusCode === 302 || proxyRes.statusCode === 303) {
         res.end()
         return
@@ -89,16 +79,13 @@ function proxyToKeycloak(req, res) {
 }
 
 const server = http.createServer((req, res) => {
-  // Proxy API requests to Keycloak
   if (req.url.startsWith('/api')) {
     proxyToKeycloak(req, res)
     return
   }
 
-  // Serve static files
   let filePath = path.join(DIST_DIR, req.url === '/' ? 'index.html' : req.url)
 
-  // If file doesn't exist and it's not an asset, serve index.html (SPA fallback)
   if (!fs.existsSync(filePath) && !req.url.includes('.')) {
     filePath = path.join(DIST_DIR, 'index.html')
   }
@@ -108,6 +95,6 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`\n✅ MyApp server running at http://localhost:${PORT}`)
-  console.log(`   📡 API proxy → ${KEYCLOAK_URL}`)
-  console.log(`   📁 Static files → dist/\n`)
+  console.log(`   📡 API proxy -> ${KEYCLOAK_URL}`)
+  console.log(`   📁 Static files -> dist/\n`)
 })

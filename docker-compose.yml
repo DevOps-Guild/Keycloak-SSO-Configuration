@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -14,43 +12,40 @@ services:
       - "8081:8080"
     volumes:
       - ./doc/myapp-frontend-realm.json:/opt/keycloak/data/import/myapp-frontend-realm.json:ro
+      - keycloak_data:/opt/keycloak/data
+    restart: unless-stopped
 
   app1:
-    image: node:20-alpine
-    working_dir: /app
-    command: sh -c "corepack enable && npm ci && npm run build && node server.js"
+    build:
+      context: ./keycloak-app-SSO
+      args:
+        VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL:-http://localhost:8081}
+        VITE_KEYCLOAK_REALM: ${VITE_KEYCLOAK_REALM:-myapp-frontend}
+        VITE_KEYCLOAK_CLIENT_ID: ${VITE_KEYCLOAK_CLIENT_ID_APP1:-myapp-frontend}
     environment:
       PORT: 3000
       KEYCLOAK_URL: http://keycloak:8080
-      VITE_KEYCLOAK_URL: http://localhost:8081
-      VITE_KEYCLOAK_REALM: myapp-frontend
-      VITE_KEYCLOAK_CLIENT_ID: myapp-frontend
-    volumes:
-      - ./keycloak-app-SSO:/app
-      - app1_node_modules:/app/node_modules
     ports:
       - "3000:3000"
     depends_on:
       - keycloak
+    restart: unless-stopped
 
   app2:
-    image: node:20-alpine
-    working_dir: /app
-    command: sh -c "corepack enable && npm ci && npm run build && node server.js"
+    build:
+      context: ./keycloak-app-SSO-2
+      args:
+        VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL:-http://localhost:8081}
+        VITE_KEYCLOAK_REALM: ${VITE_KEYCLOAK_REALM:-myapp-frontend}
+        VITE_KEYCLOAK_CLIENT_ID: ${VITE_KEYCLOAK_CLIENT_ID_APP2:-myapp-frontend-2}
     environment:
       PORT: 3001
       KEYCLOAK_URL: http://keycloak:8080
-      VITE_KEYCLOAK_URL: http://localhost:8081
-      VITE_KEYCLOAK_REALM: myapp-frontend
-      VITE_KEYCLOAK_CLIENT_ID: myapp-frontend-2
-    volumes:
-      - ./keycloak-app-SSO-2:/app
-      - app2_node_modules:/app/node_modules
     ports:
       - "3001:3001"
     depends_on:
       - keycloak
+    restart: unless-stopped
 
 volumes:
-  app1_node_modules:
-  app2_node_modules:
+  keycloak_data:
