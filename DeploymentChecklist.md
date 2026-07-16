@@ -179,7 +179,7 @@ It is very intuitive to write a prompt to ai and just copy paste, but i ran thro
 
     4. Test outside the server, on your browser
 
-        http://YOUR_EC2_PUBLIC_IP
+        http://13.53.130.176
 
     
 # 7. When you're done

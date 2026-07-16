@@ -43,7 +43,7 @@ If you later add a reverse proxy or domain, you may close some of these ports an
 From your terminal, connect to the instance:
 
 ```bash
-ssh -i /path/to/key.pem ubuntu@YOUR_EC2_PUBLIC_IP
+ssh -i /path/to/key.pem ubuntu@13.53.130.176
 ```
 
 ## Step 4: Install Docker
@@ -74,7 +74,7 @@ Create a file named `.env` in the repository root on EC2.
 Example:
 
 ```bash
-VITE_KEYCLOAK_URL=http://YOUR_EC2_PUBLIC_IP:8081
+VITE_KEYCLOAK_URL=http://13.53.130.176:8081
 VITE_KEYCLOAK_REALM=myapp-frontend
 VITE_KEYCLOAK_CLIENT_ID_APP1=myapp-frontend
 VITE_KEYCLOAK_CLIENT_ID_APP2=myapp-frontend-2
@@ -96,9 +96,9 @@ Use the same public IP or domain name that users will open in the browser.
 Example:
 
 ```json
-"http://YOUR_EC2_PUBLIC_IP:3000/*",
-"http://YOUR_EC2_PUBLIC_IP:3001/*",
-"http://YOUR_EC2_PUBLIC_IP:8081/*"
+"http://13.53.130.176:3000/*",
+"http://13.53.130.176:3001/*",
+"http://13.53.130.176:8081/*"
 ```
 
 If you later use a domain name, replace the IP with the domain.
@@ -135,9 +135,9 @@ docker logs <container_name>
 
 Use the EC2 public IP in your browser:
 
-- Keycloak: `http://YOUR_EC2_PUBLIC_IP:8081`
-- App 1: `http://YOUR_EC2_PUBLIC_IP:3000`
-- App 2: `http://YOUR_EC2_PUBLIC_IP:3001`
+- Keycloak: `http://13.53.130.176:8081`
+- App 1: `http://13.53.130.176:3000`
+- App 2: `http://13.53.130.176:3001`
 
 ## Step 11: Test the login flow
 
