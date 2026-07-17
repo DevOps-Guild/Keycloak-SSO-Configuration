@@ -16,9 +16,9 @@ services:
       - ./doc/myapp-frontend-realm.json:/opt/keycloak/data/import/myapp-frontend-realm.json:ro
 
   app1:
-    image: node:20-alpine
+    image: node:22-alpine
     working_dir: /app
-    command: sh -c "corepack enable && npm ci && npm run build && node server.js"
+    command: sh -c "npm install -g pnpm@11.9.0 && pnpm install && pnpm run build && node server.js"
     environment:
       PORT: 3000
       KEYCLOAK_URL: http://keycloak:8080
@@ -32,11 +32,14 @@ services:
       - "3000:3000"
     depends_on:
       - keycloak
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 
   app2:
-    image: node:20-alpine
+    image: node:22-alpine
     working_dir: /app
-    command: sh -c "corepack enable && npm ci && npm run build && node server.js"
+    command: sh -c "npm install -g pnpm@11.9.0 && pnpm install && pnpm run build && node server.js"
     environment:
       PORT: 3001
       KEYCLOAK_URL: http://keycloak:8080
@@ -50,6 +53,9 @@ services:
       - "3001:3001"
     depends_on:
       - keycloak
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 
 volumes:
   app1_node_modules:
