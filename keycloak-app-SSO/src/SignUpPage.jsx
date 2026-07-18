@@ -228,52 +228,31 @@ export default function SignUpPage() {
 
     setLoading(true)
     try {
-      const { realm, clientId } = keycloakConfig
-
-      // POST through our Vite proxy (dev) or production proxy server.
-      // This avoids CORS since the browser talks to same-origin '/api'.
-      const registerUrl = `/api/realms/${realm}/protocol/openid-connect/registrations`
-
-      const res = await fetch(registerUrl, {
+      const res = await fetch('/api/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          client_id:         clientId,
-          firstName:         form.firstName,
-          lastName:          form.lastName,
-          email:             form.email,
-          username:          form.username,
-          password:          form.password,
-          'password-confirm': form.confirmPassword,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          username: form.username,
+          password: form.password,
         }),
-        redirect: 'manual',
       })
 
-      // Keycloak returns 302 on success (redirect to the redirect_uri).
-      // On failure it returns 200 with an HTML page containing error fields.
-      if (res.status === 302 || res.status === 303) {
+      const data = await res.json().catch(() => ({}))
+
+      if (res.ok) {
         setSuccess(true)
       } else if (res.status === 409) {
         throw new Error('A user with that username or email already exists.')
       } else {
-        // Try to read error details from the response body
-        const text = await res.text()
-        // Look for common Keycloak error messages in the HTML
-        if (text.includes('usernameExists')) {
-          throw new Error('Username is already taken.')
-        }
-        if (text.includes('emailExists')) {
-          throw new Error('Email is already registered.')
-        }
-        if (text.includes('invalidPassword')) {
-          throw new Error('Password does not meet the policy requirements.')
-        }
-        throw new Error('Registration failed. Please check your input and try again.')
+        throw new Error(data.error || 'Registration failed. Please check your input and try again.')
       }
     } catch (err) {
       if (err.message === 'Failed to fetch') {
         setError(
-          'Cannot reach Keycloak. Make sure it is running at http://localhost:8080.'
+          'Cannot reach the registration service. Make sure the app server and Keycloak are running.'
         )
       } else {
         setError(err.message)

@@ -12,6 +12,9 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const KEYCLOAK_URL = process.env.KEYCLOAK_URL || 'http://localhost:8080'
+const KEYCLOAK_ADMIN_USERNAME = process.env.KEYCLOAK_ADMIN_USERNAME || 'admin'
+const KEYCLOAK_ADMIN_PASSWORD = process.env.KEYCLOAK_ADMIN_PASSWORD || 'admin'
+const KEYCLOAK_REALM = process.env.KEYCLOAK_REALM || 'myapp-frontend'
 const PORT = process.env.PORT || 3001
 const DIST_DIR = path.join(__dirname, 'dist')
 
@@ -78,7 +81,79 @@ function proxyToKeycloak(req, res) {
   })
 }
 
+async function getAdminToken() {
+  const res = await fetch(`${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'password',
+      client_id: 'admin-cli',
+      username: KEYCLOAK_ADMIN_USERNAME,
+      password: KEYCLOAK_ADMIN_PASSWORD,
+    }),
+  })
+
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Admin login failed: ${res.status} ${text}`)
+  }
+
+  const data = await res.json()
+  return data.access_token
+}
+
+async function registerUser(payload) {
+  const token = await getAdminToken()
+  const res = await fetch(`${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: payload.username,
+      email: payload.email,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      enabled: true,
+      emailVerified: false,
+      credentials: [{ type: 'password', value: payload.password, temporary: false }],
+    }),
+  })
+
+  if (res.status === 201) {
+    return { ok: true }
+  }
+
+  const text = await res.text()
+  throw new Error(`Keycloak user creation failed: ${res.status} ${text}`)
+}
+
 const server = http.createServer((req, res) => {
+  if (req.url === '/api/register' && req.method === 'POST') {
+    let body = ''
+    req.on('data', chunk => { body += chunk })
+    req.on('end', async () => {
+      try {
+        const payload = JSON.parse(body || '{}')
+        if (!payload.username || !payload.email || !payload.password) {
+          res.writeHead(400, { 'Content-Type': 'application/json' })
+          res.end(JSON.stringify({ error: 'Missing required signup fields.' }))
+          return
+        }
+
+        await registerUser(payload)
+        res.writeHead(201, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ ok: true }))
+      } catch (err) {
+        console.error('[REGISTER ERROR]', err.message)
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: err.message }))
+      }
+    })
+    return
+  }
+
   if (req.url.startsWith('/api')) {
     proxyToKeycloak(req, res)
     return
