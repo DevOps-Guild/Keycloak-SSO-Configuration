@@ -2,16 +2,22 @@ version: '3.8'
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.0  
     container_name: keycloak
-    command: start-dev --import-realm
+    command: start --import-realm  
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:-admin}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      KC_HOSTNAME: https://deploynest.dev
+      KC_HOSTNAME_STRICT: "true"
+      KC_PROXY_HEADERS: xforwarded
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
     ports:
-      - "8081:8080"
+      - "127.0.0.1:8081:8080"   
     volumes:
       - ./doc/myapp-frontend-realm.json:/opt/keycloak/data/import/myapp-frontend-realm.json:ro
 
@@ -22,7 +28,7 @@ services:
     environment:
       PORT: 3000
       KEYCLOAK_URL: http://keycloak:8080
-      VITE_KEYCLOAK_URL: http://localhost:8081
+      VITE_KEYCLOAK_URL: https://deploynest.dev
       VITE_KEYCLOAK_REALM: myapp-frontend
       VITE_KEYCLOAK_CLIENT_ID: myapp-frontend
     volumes:
@@ -39,7 +45,7 @@ services:
     environment:
       PORT: 3001
       KEYCLOAK_URL: http://keycloak:8080
-      VITE_KEYCLOAK_URL: http://localhost:8081
+      VITE_KEYCLOAK_URL: https://deploynest.dev
       VITE_KEYCLOAK_REALM: myapp-frontend
       VITE_KEYCLOAK_CLIENT_ID: myapp-frontend-2
     volumes:
