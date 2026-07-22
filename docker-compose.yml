@@ -1,6 +1,15 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:16
+    container_name: keycloak-postgres
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - keycloak_postgres_data:/var/lib/postgresql/data
   keycloak:
     image: quay.io/keycloak/keycloak:26.0  
     container_name: keycloak
@@ -20,6 +29,8 @@ services:
       - "127.0.0.1:8081:8080"   
     volumes:
       - ./doc/myapp-frontend-realm.json:/opt/keycloak/data/import/myapp-frontend-realm.json:ro
+    depends_on:
+      - postgres
 
   app1:
     image: node:22-alpine
