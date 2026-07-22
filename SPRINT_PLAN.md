@@ -11,7 +11,7 @@ Use **Agile with short sprints**.
 - If a task blocks another task, the sprint plan can be adjusted without redoing everything.
 
 ## Working Assumptions
-- Sprint length: 1 week.
+- Sprint length: 5 days.
 - Team size: beginner contributors working in parallel where possible.
 - Review cadence: audit at the end of every sprint.
 - Delivery target: a Dockerized stack that can be prepared for AWS deployment and used by real users.
@@ -146,14 +146,13 @@ Confirm that users can actually use the system end to end.
 4. Sprint 4 last, because testing should happen after the deployment setup is in place.
 
 ## Suggested Timeline
-- Sprint 1: 1 week
-- Sprint 2: 1 week
-- Sprint 3: 1 week
-- Sprint 4: 1 week
+- Sprint 1: 5 days
+- Sprint 2: 5 days
+- Sprint 3: 5 days
+- Sprint 4: 5 days
 
 ## Notes for Audits
 - Review progress at the end of each sprint.
 - If a task finishes early, move the contributor to the next dependent task.
 - If a task slips, keep the sprint goal small and avoid adding unrelated work.
 - Do not start AWS deployment until Sprint 1 is stable.
-
