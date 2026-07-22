@@ -6,8 +6,8 @@ services:
     container_name: keycloak
     command: start --import-realm  
     environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: admin
-      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:-admin}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       KC_HOSTNAME: https://deploynest.dev
@@ -22,9 +22,9 @@ services:
       - ./doc/myapp-frontend-realm.json:/opt/keycloak/data/import/myapp-frontend-realm.json:ro
 
   app1:
-    image: node:20-alpine
+    image: node:22-alpine
     working_dir: /app
-    command: sh -c "corepack enable && npm ci && npm run build && node server.js"
+    command: sh -c "node server.js"
     environment:
       PORT: 3000
       KEYCLOAK_URL: http://keycloak:8080
@@ -33,16 +33,15 @@ services:
       VITE_KEYCLOAK_CLIENT_ID: myapp-frontend
     volumes:
       - ./keycloak-app-SSO:/app
-      - app1_node_modules:/app/node_modules
     ports:
       - "3000:3000"
     depends_on:
       - keycloak
 
   app2:
-    image: node:20-alpine
+    image: node:22-alpine
     working_dir: /app
-    command: sh -c "corepack enable && npm ci && npm run build && node server.js"
+    command: sh -c "node server.js"
     environment:
       PORT: 3001
       KEYCLOAK_URL: http://keycloak:8080
@@ -51,12 +50,7 @@ services:
       VITE_KEYCLOAK_CLIENT_ID: myapp-frontend-2
     volumes:
       - ./keycloak-app-SSO-2:/app
-      - app2_node_modules:/app/node_modules
     ports:
       - "3001:3001"
     depends_on:
       - keycloak
-
-volumes:
-  app1_node_modules:
-  app2_node_modules:
